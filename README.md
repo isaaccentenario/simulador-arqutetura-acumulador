@@ -1,3 +1,3 @@
-# Simulador de arqutetura - acumulador
+# Simulador de arquitetura - acumulador
 Simulador de Arquitetura - acumulador
 

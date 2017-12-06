@@ -1,4 +1,5 @@
 import { Component, ElementRef } from '@angular/core';
+import { ToastController } from 'ionic-angular';
 
 @Component({
 	selector: 'page-home',
@@ -19,7 +20,11 @@ export class HomePage {
 	public ir:Registrador = new Registrador();
 	public instrucao:string;
 	
-	public constructor() { 
+	private comandos_permitidos:any = [
+		'ZER','ADD','STO','MUL','DIV','SUB','AND','OR'
+	];
+
+	public constructor(public toast:ToastController) { 
 
 		for( let i = 0; i < this.config["registradores"]; i++ ) {
 			this.registradores[i] = new Registrador();
@@ -35,8 +40,50 @@ export class HomePage {
 	public executar()
 	{
 		if( this.instrucao.length < 4 ) {
+			this.toast.create({
+				'message': 'Impossível executar uma instrução vazia, né truta!',
+				'duration': 3000
+			})
 
+			return false;
 		}
+
+		var linhas = this.instrucao.split('\n');
+
+		let l = 1;
+		for( let linha of linhas ) {
+			if (linha.replace(/\s/g, "").length <= 0 ) {
+				continue;
+			}
+			let match = linha.match(new RegExp('^(' + this.comandos_permitidos.join('|') + ') '));
+
+			if( match == null ) {
+				this.toast.create({
+					'message' : 'A linha ' + l + ' ('+linha+') contém comandos desconhecidos',
+					'duration' : 3000
+				}).present();
+
+				return false;
+			}
+
+			match = linha.match(new RegExp('(PC|IR|ACC|R[0-'+this.config["registradores"]+']|M[0-'+this.config["memoria"]+'])$'));
+			
+			if( null == match ) {
+				this.toast.create({
+					'message' : 'A linha ' + l + ' ('+linha+') contém um elemento de índice inválido (R ou M)',
+					'duration' : 3000
+				}).present();
+
+				return false;
+			}
+
+			l++;
+		}
+	}
+
+	public zera_acumulador()
+	{
+
 	}
 }
 

@@ -15,6 +15,8 @@ export class HomePage {
 	public registradores:Registrador[] = [];
 	public memoria:Memoria[] = [];
 	public acumulador:Registrador = new Registrador();
+	public pc:Registrador = new Registrador();
+	public ir:Registrador = new Registrador();
 	public instrucao:string;
 	
 	public constructor() { 
@@ -27,6 +29,13 @@ export class HomePage {
 		for( let i = 0; i < this.config["memoria"]; i++ ) {
 			this.memoria[i] = new Memoria();
 			this.memoria[i].setIndice(i);
+		}
+	}
+
+	public executar()
+	{
+		if( this.instrucao.length < 4 ) {
+
 		}
 	}
 }

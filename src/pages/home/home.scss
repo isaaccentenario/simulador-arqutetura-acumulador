@@ -1,5 +1,51 @@
 page-home {
     ion-textarea {
-        border: 1px solid #f0f0f0;
+        background: #f0f0f0;
     }
-}
+
+    .player {
+        max-width: 300px;
+    }
+    .instructs ion-badge {
+        position: relative;
+    }
+    .instructs ion-badge .tooltip {
+        display: block;
+        width: 150px;
+        height: auto;
+        position: absolute;
+        right: 50%;
+        top: 30px;
+        transform: translateX(50%);
+        padding: 4px;
+        background: rgba(0,0,0,0.8);
+        border-radius: 3px;
+        opacity: 0;
+        word-break: break-word;
+        white-space: normal;
+        line-height: 130%;
+
+        transition: 0.2s linear;
+    }
+    .instructs ion-badge .tooltip:after {
+        content: "";
+        display: block;
+        width: 0;
+        height: 0;
+        border: 5px solid transparent;
+        border-bottom: 5px solid rgba(0, 0, 0, 0.8);
+        position: absolute;
+        left: 50%;
+        top: -10px;
+        transform: translateX(-50%);
+    }
+
+    .instructs ion-badge:hover .tooltip {
+        opacity: 1;
+        z-index: 10;
+    }
+
+    .item-textarea ion-label {
+        margin-left: 10px !important;
+    }
+}  

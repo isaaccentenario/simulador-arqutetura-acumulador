@@ -52,7 +52,7 @@
 				<ion-col col-1 *ngFor="let m of memoria">
 					<ion-item>
 						<ion-label floating>M{{m.getIndice()}}</ion-label>
-						<ion-input type="number" [(ngModel)]="m.valor" name="valor"></ion-input>
+						<ion-input type="text" [(ngModel)]="m.valor" name="valor"></ion-input>
 					</ion-item>
 				</ion-col>
 			</ion-row>
@@ -60,22 +60,53 @@
 	</div>
 	<br>
 	<div class="program">
-		<ion-grid>
+		<ion-grid text-left>
 			<ion-row>
 				<ion-col col-6>
 					<ion-item>
 						<ion-label floating>Instruções</ion-label>
-						<ion-textarea rows="10" [(ngModel)]="instrucao" name="instrucao" (keyup)="instrucao=instrucao.toUpperCase()"></ion-textarea>
+						<ion-textarea rows="10" [(ngModel)]="instrucao" name="instrucao" (keyup)="instructToUpper()"></ion-textarea>
 					</ion-item>
 				</ion-col>
 				<ion-col col-6>
 					<ion-label floating>&nbsp;</ion-label>
-					<button ion-button type="button" (click)="executar()">Executar</button>
 
-					<p>
-					<strong>Instruções suportadas</strong><br>
-						<ion-badge style="margin: 2px" *ngFor="let i of comandos_permitidos">
-						{{i}}
+					<div class="player">
+						<ion-grid>
+							<ion-row>
+								<ion-col width="25">
+									<button clear ion-button icon-only (click)="player.prev()">
+										<ion-icon name="skip-backward"></ion-icon>
+									</button>
+								</ion-col>
+								<ion-col width="25">
+									<button clear ion-button icon-only (click)="player.play()" *ngIf="!executando">
+										<ion-icon name="play"></ion-icon>
+									</button>
+									<button clear ion-button icon-only (click)="player.pause()" *ngIf="executando">
+										<ion-icon name="pause"></ion-icon>
+									</button>
+								</ion-col>
+								<ion-col width="25">
+									<button clear ion-button icon-only (click)="player.next()">
+										<ion-icon name="skip-forward"></ion-icon>
+									</button>
+								</ion-col>
+								<ion-col width="25">
+									<button clear ion-button icon-only (click)="player.stop()"></button>
+								</ion-col>
+							</ion-row>
+						</ion-grid>
+
+						<ion-badge *ngIf="linha_atual">
+							Comando atual: {{linha_atual}}
+						</ion-badge>
+					</div>
+
+					<p class="instructs">
+					<strong>Instruções suportadas: </strong> (passe o mouse)<br>
+						<ion-badge style="margin: 2px" *ngFor="let i of objectKeys(comandos_permitidos)">
+						{{i}} <span class="tooltip">{{legendas[i]}}</span>
 						</ion-badge>
 					</p>
 

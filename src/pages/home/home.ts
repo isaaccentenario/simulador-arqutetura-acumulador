@@ -189,12 +189,19 @@ export class HomePage {
 		}
 	}
 
+	getElemento(elemento) {
+		if( elemento.match(/[R,M]\d{1,2}/) ) {
+			return parseInt(elemento.substring(1));
+		}
+		return elemento.toLowerCase();
+	}
+
 	zer(r) {
 		console.log(r);
 	}
 
 	add(r) {
-		console.log(r);
+		console.log(this.getElemento(r));
 	}
 
 	sto(r) {

@@ -270,7 +270,7 @@ export class HomePage {
 	sto(r) {
 			let e = this.getElemento(r);
 			this.registradores[e].setValor(this.acumulador.getValor());
-
+			this.ir.setValor("STO" + r);
 	}
 
 	mul(r) {
@@ -283,7 +283,7 @@ export class HomePage {
 				this.registradores[e].getValor() 
 			);
 		}
-
+		this.ir.setValor("MUL " + r);
 	}
 
 	div(r) {
@@ -296,7 +296,7 @@ export class HomePage {
 				this.registradores[e].getValor() 
 			);
 		}
-
+		this.ir.setValor("DIV " + r);
 	}
 
 	sub(r) {
@@ -309,6 +309,7 @@ export class HomePage {
 				this.registradores[e].getValor() 
 			);
 		}
+		this.ir.setValor("SUB " + r);
 	}
 
 	and(r) {
@@ -321,6 +322,7 @@ export class HomePage {
 				this.registradores[e].getValor() 
 			);
 		}	
+		this.ir.setValor("AND " + r);
 	}
 
 	or(r) {
@@ -333,6 +335,7 @@ export class HomePage {
 				this.registradores[e].getValor() 
 			);
 		}
+		this.ir.setValor("OR" + r);
 	}
 
 }

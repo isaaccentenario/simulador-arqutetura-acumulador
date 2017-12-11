@@ -33,8 +33,8 @@ export class HomePage {
 
 	private legendas:any = {
 		'ZER': 'Zera um registrador',
-		'ADD': 'Adiciona um valor de um registrador',
-		'STO': 'Armazena o valor do acumulador no registrador,Armazena o valor do acumulador no registrador,Armazena o valor do acumulador no registrador',
+		'ADD': 'Adiciona um valor de um registrador ao acumulador',
+		'STO': 'Armazena o valor do acumulador em um registrador',
 		'MUL': 'Multiplica um valor a partir de um registrador',
 		'DIV': 'Divide um valor',
 		'SUB': 'Subtrai um valor',
@@ -129,7 +129,7 @@ export class HomePage {
 				return false;
 			}
 
-			let elem = linha.match(new RegExp('(PC|IR|ACC|R[0-'+this.config["registradores"]+']|M[0-'+this.config["memoria"]+'])$'));
+			let elem = linha.match(new RegExp('(PC|IR|ACC|\\d{1,2}|R[0-'+(this.config["registradores"]-1)+']|M[0-'+(this.config["memoria"]-1)+'])$'));
 			
 			if( null == elem ) {
 				this.toast.create({
@@ -190,18 +190,20 @@ export class HomePage {
 	}
 
 	getElemento(elemento) {
-		if( elemento.match(/[R,M]\d{1,2}/) ) {
+		if( elemento.match(/^\d{1,2}$/) ) {
 			return parseInt(elemento.substring(1));
 		}
-		return elemento.toLowerCase();
+		return false;
 	}
 
 	zer(r) {
-		console.log(r);
+
 	}
 
 	add(r) {
-		console.log(this.getElemento(r));
+		if(this.getElemento(r) !== false ) {
+			this.acumulador.setValor( this.acumulador.getValor() + parseInt(r));
+		}
 	}
 
 	sto(r) {
@@ -249,7 +251,7 @@ class Registrador {
 
 	getValor()
 	{
-		return this.valor;
+		return parseFloat(this.valor);
 	}
 }
 

@@ -230,6 +230,27 @@ export class HomePage {
 		}
 	}
 
+	inserirComando(r){
+		for (let i = 0; i < this.config["memoria"]; i++){
+			if(!this.memoria[i].getValor){
+				this.memoria[i].setValor(r);
+				break;
+			}
+		}
+	}
+
+	inserirDado(r){
+		for (let i = 10; i < this.config["memoria"]; i++){
+			if(!this.memoria[i].getValor){
+				this.memoria[i].setValor(r);
+				break;
+			}
+		}	
+	}
+
+
+
+
 	add(r) {
 		if( this.getElemento(r) == -1 ) {
 			this.acumulador.setValor( this.acumulador.getValor() + parseInt(r));
@@ -241,7 +262,7 @@ export class HomePage {
 			);
 		}
 
-		this.pc.setValor("ADD");
+		this.ir.setValor("ADD " + r);
 
 
 	}

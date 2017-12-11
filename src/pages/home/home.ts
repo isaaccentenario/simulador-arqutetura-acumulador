@@ -243,7 +243,16 @@ export class HomePage {
 	}
 
 	sto(r) {
-		console.log(r);
+		if( this.getElemento(r) == -1 ) {
+			this.acumulador.setValor( this.acumulador.getValor() + parseInt(r));
+		} else {
+			let e = this.getElemento(r);
+			this.acumulador.setValor( 
+				this.acumulador.getValor() + 
+				this.registradores[e].getValor() 
+			);
+		}
+	
 
 
 	}
@@ -276,22 +285,38 @@ export class HomePage {
 
 	sub(r) {
 		if( this.getElemento(r) == -1 ) {
-			this.acumulador.setValor( this.acumulador.getValor() / parseInt(r));
+			this.acumulador.setValor( this.acumulador.getValor() - parseInt(r));
 		} else {
 			let e = this.getElemento(r);
 			this.acumulador.setValor( 
-				this.acumulador.getValor() /
+				this.acumulador.getValor() -
 				this.registradores[e].getValor() 
 			);
 		}
 	}
 
 	and(r) {
-		console.log(r);
+		if( this.getElemento(r) == -1 ) {
+			this.acumulador.setValor( this.acumulador.getValor() & parseInt(r));
+		} else {
+			let e = this.getElemento(r);
+			this.acumulador.setValor( 
+				this.acumulador.getValor() &
+				this.registradores[e].getValor() 
+			);
+		}	
 	}
 
 	or(r) {
-		console.log(r);
+		if( this.getElemento(r) == -1 ) {
+			this.acumulador.setValor( this.acumulador.getValor() | parseInt(r));
+		} else {
+			let e = this.getElemento(r);
+			this.acumulador.setValor( 
+				this.acumulador.getValor() |
+				this.registradores[e].getValor() 
+			);
+		}
 	}
 
 }

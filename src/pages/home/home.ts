@@ -240,20 +240,15 @@ export class HomePage {
 				this.registradores[e].getValor() 
 			);
 		}
+
+		this.pc.setValor("ADD");
+
+
 	}
 
 	sto(r) {
-		if( this.getElemento(r) == -1 ) {
-			this.acumulador.setValor( this.acumulador.getValor() + parseInt(r));
-		} else {
 			let e = this.getElemento(r);
-			this.acumulador.setValor( 
-				this.acumulador.getValor() + 
-				this.registradores[e].getValor() 
-			);
-		}
-	
-
+			this.registradores[e].setValor(this.acumulador.getValor());
 
 	}
 

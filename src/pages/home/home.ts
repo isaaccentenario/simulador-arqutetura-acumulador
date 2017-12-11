@@ -193,8 +193,18 @@ export class HomePage {
 		if (elemento.match(/(R|M)\d{1,2}/) != null ) {
 			return parseInt(elemento.substr(1));
 		}
-		return false;
+		return -1;
 	}
+
+	ehMemoria( r ) {
+    return /M\d{1,2}/.test( r );
+	}
+	ehRegistrador( r ) {
+    return /R\d{1,2}/.test( r );
+	}
+
+
+
 
 	zer(r) {
 		if( undefined == r ) {
@@ -221,7 +231,7 @@ export class HomePage {
 	}
 
 	add(r) {
-		if( this.getElemento(r) === false ) {
+		if( this.getElemento(r) == -1 ) {
 			this.acumulador.setValor( this.acumulador.getValor() + parseInt(r));
 		} else {
 			let e = this.getElemento(r);
@@ -234,18 +244,46 @@ export class HomePage {
 
 	sto(r) {
 		console.log(r);
+
+
 	}
 
 	mul(r) {
-		console.log(r);
+		if( this.getElemento(r) == -1 ) {
+			this.acumulador.setValor( this.acumulador.getValor() * parseInt(r));
+		} else {
+			let e = this.getElemento(r);
+			this.acumulador.setValor( 
+				this.acumulador.getValor() *
+				this.registradores[e].getValor() 
+			);
+		}
+
 	}
 
 	div(r) {
-		console.log(r);
+		if( this.getElemento(r) == -1 ) {
+			this.acumulador.setValor( this.acumulador.getValor() / parseInt(r));
+		} else {
+			let e = this.getElemento(r);
+			this.acumulador.setValor( 
+				this.acumulador.getValor() /
+				this.registradores[e].getValor() 
+			);
+		}
+
 	}
 
 	sub(r) {
-		console.log(r);
+		if( this.getElemento(r) == -1 ) {
+			this.acumulador.setValor( this.acumulador.getValor() / parseInt(r));
+		} else {
+			let e = this.getElemento(r);
+			this.acumulador.setValor( 
+				this.acumulador.getValor() /
+				this.registradores[e].getValor() 
+			);
+		}
 	}
 
 	and(r) {
@@ -255,6 +293,7 @@ export class HomePage {
 	or(r) {
 		console.log(r);
 	}
+
 }
 
 class Registrador {

@@ -190,19 +190,45 @@ export class HomePage {
 	}
 
 	getElemento(elemento) {
-		if( elemento.match(/^\d{1,2}$/) ) {
-			return parseInt(elemento.substring(1));
+		if (elemento.match(/(R|M)\d{1,2}/) != null ) {
+			return parseInt(elemento.substr(1));
 		}
 		return false;
 	}
 
 	zer(r) {
+		if( undefined == r ) {
+			for(let i = 0; i < this.config["registradores"]; i++ ) {
+				this.registradores[i].setValor(0);
+			}
+			for (let i = 0; i < this.config["memoria"]; i++) {
+				this.memoria[i].setValor(0);
+			}
+			this.acumulador.setValor(0);
+			this.pc.setValor(0);
+			this.ir.setValor(0);
+		} else {
+			if( r == 'ACC' ) {
 
+			} else if( r == 'PC' ) {
+
+			} else if( r == 'IR' ) {
+
+			} else {
+				
+			}
+		}
 	}
 
 	add(r) {
-		if(this.getElemento(r) !== false ) {
+		if( this.getElemento(r) === false ) {
 			this.acumulador.setValor( this.acumulador.getValor() + parseInt(r));
+		} else {
+			let e = this.getElemento(r);
+			this.acumulador.setValor( 
+				this.acumulador.getValor() + 
+				this.registradores[e].getValor() 
+			);
 		}
 	}
 
@@ -251,6 +277,8 @@ class Registrador {
 
 	getValor()
 	{
+		if( this.valor == null || this.valor == undefined ) return 0;
+
 		return parseFloat(this.valor);
 	}
 }

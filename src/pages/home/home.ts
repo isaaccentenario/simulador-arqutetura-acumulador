@@ -40,13 +40,13 @@ export class HomePage {
 
 	private legendas:any = {
 		'ZER': 'Zera os elementos, de forma unitária ou completa',
-		'ADD': 'Adiciona um valor de um registrador ao acumulador',
+		'ADD': 'Soma um valor de um registrador ao acumulador',
 		'STO': 'Armazena o valor do acumulador em um registrador',
-		'MUL': 'Multiplica um valor a partir de um registrador',
-		'DIV': 'Divide um valor',
-		'SUB': 'Subtrai um valor',
-		'AND': 'Faz a operação AND a partir de um registrador',
-		'OR' : 'Faz a operação OR a partir de um registrador',
+		'MUL': 'Multiplica um valor pelo acumulador',
+		'DIV': 'Divide um valor pelo acumulador',
+		'SUB': 'Subtrai um valor pelo acumulador',
+		'AND': 'Faz a operação AND com um valor e o acumulador',
+		'OR' : 'Faz a operação OR com um valor e o acumulador',
 		'CLR': 'Esvazia os elementos, de forma unitária ou completa'
 	};
 
@@ -146,30 +146,25 @@ export class HomePage {
 					'duration' : 3000
 				}).present();
 			}
-
-			console.log(this.ehMemoria(elem[0]));
-			console.log(this.ehRegistrador(elem[0]));
-			console.log(this.getElemento(elem[0]));
-
-			if( this.ehMemoria(elem[0])) {
-				if(this.getElemento(elem[0]) >= this.config["memoria"] ) {
-					this.toast.create({
-						'message': 'A linha ' + l + ' (' + linha + ') contém um elemento de índice inválido (R ou M)',
-						'duration': 3000
-					}).present();
-					return false;
-				}
-			} else if( this.ehRegistrador( elem[0] ) ) {
-				if (this.getElemento(elem[0]) >= this.config["registradores"] ) {
-					this.toast.create({
-						'message': 'A linha ' + l + ' (' + linha + ') contém um elemento de índice inválido (R ou M)',
-						'duration': 3000
-					}).present();
-					return false;
-				}
-			}
-
 			if (null != elem) {
+				if (this.ehMemoria(elem[0])) {
+					if (this.getElemento(elem[0]) >= this.config["memoria"]) {
+						this.toast.create({
+							'message': 'A linha ' + l + ' (' + linha + ') contém um elemento de índice inválido (R ou M)',
+							'duration': 3000
+						}).present();
+						return false;
+					}
+				} else if (this.ehRegistrador(elem[0])) {
+					if (this.getElemento(elem[0]) >= this.config["registradores"]) {
+						this.toast.create({
+							'message': 'A linha ' + l + ' (' + linha + ') contém um elemento de índice inválido (R ou M)',
+							'duration': 3000
+						}).present();
+						return false;
+					}
+				}
+
 				this.execucao.push({
 					'funcao' : cmd[0].toLowerCase().trim(),
 					'elem' : elem[0]
@@ -328,8 +323,8 @@ export class HomePage {
 		} else {
 			let e = this.getElemento(r);
 			this.acumulador.setValor( 
-				this.acumulador.getValor() + 
-				this.registradores[e].getValor() 
+			this.acumulador.getValor() + 
+			this.registradores[e].getValor() 
 			);
 		}
 
@@ -438,7 +433,7 @@ class Registrador {
 
 	getValor()
 	{
-		if( this.valor == null || this.valor == undefined ) return 0;
+		if( this.valor == '' || this.valor == undefined ) return 0;
 
 		return parseFloat(this.valor);
 	}

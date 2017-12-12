@@ -137,7 +137,7 @@ export class HomePage {
 				return false;
 			}
 
-			let elem = linha.match(new RegExp('(PC|IR|ACC|\\d|R[0-9]{1,2}|M[0-9]{1,2})'));
+			let elem = linha.match(new RegExp('(PC|IR|ACC|\\d{1,4}|R[0-9]{1,2}|M[0-9]{1,2})'));
 			let exc = linha.match(new RegExp('(' + this.comandos_excepcionais.join('|') + ')'));
 
 			if( null == elem && !exc ) {

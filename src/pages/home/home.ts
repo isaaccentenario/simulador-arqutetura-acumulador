@@ -28,23 +28,26 @@ export class HomePage {
 		'DIV': this.div,
 		'SUB': this.sub,
 		'AND': this.and,
-		'OR': this.or
+		'OR': this.or,
+		'CLR' : this.clr
 	};
 
 	// comandos que podem não seguir padrão "COM XZ"
 	private comandos_excepcionais: any = [
-		'ZER'
+		'ZER', 
+		'CLR'
 	];
 
 	private legendas:any = {
-		'ZER': 'Zera um registrador',
+		'ZER': 'Zera os elementos, de forma unitária ou completa',
 		'ADD': 'Adiciona um valor de um registrador ao acumulador',
 		'STO': 'Armazena o valor do acumulador em um registrador',
 		'MUL': 'Multiplica um valor a partir de um registrador',
 		'DIV': 'Divide um valor',
 		'SUB': 'Subtrai um valor',
 		'AND': 'Faz a operação AND a partir de um registrador',
-		'OR' : 'Faz a operação OR a partir de um registrador'
+		'OR' : 'Faz a operação OR a partir de um registrador',
+		'CLR': 'Esvazia os elementos, de forma unitária ou completa'
 	};
 
 	public execucao:any = [];
@@ -134,7 +137,7 @@ export class HomePage {
 				return false;
 			}
 
-			let elem = linha.match(new RegExp('(PC|IR|ACC|\\d{1,2}|R[0-'+(this.config["registradores"]-1)+']|M[0-'+(this.config["memoria"]-1)+'])$'));
+			let elem = linha.match(new RegExp('(PC|IR|ACC|\\d|R[0-9]{1,2}|M[0-9]{1,2})'));
 			let exc = linha.match(new RegExp('(' + this.comandos_excepcionais.join('|') + ')'));
 
 			if( null == elem && !exc ) {
@@ -142,6 +145,28 @@ export class HomePage {
 					'message' : 'A linha ' + l + ' ('+linha+') contém um elemento de índice inválido (R ou M)',
 					'duration' : 3000
 				}).present();
+			}
+
+			console.log(this.ehMemoria(elem[0]));
+			console.log(this.ehRegistrador(elem[0]));
+			console.log(this.getElemento(elem[0]));
+
+			if( this.ehMemoria(elem[0])) {
+				if(this.getElemento(elem[0]) >= this.config["memoria"] ) {
+					this.toast.create({
+						'message': 'A linha ' + l + ' (' + linha + ') contém um elemento de índice inválido (R ou M)',
+						'duration': 3000
+					}).present();
+					return false;
+				}
+			} else if( this.ehRegistrador( elem[0] ) ) {
+				if (this.getElemento(elem[0]) >= this.config["registradores"] ) {
+					this.toast.create({
+						'message': 'A linha ' + l + ' (' + linha + ') contém um elemento de índice inválido (R ou M)',
+						'duration': 3000
+					}).present();
+					return false;
+				}
 			}
 
 			if (null != elem) {
@@ -176,6 +201,8 @@ export class HomePage {
 
 		if( undefined == item ) return false;
 
+		console.log(item);
+
 		this[item['funcao']](item['elem']);
 		this.passo++;
 
@@ -208,7 +235,7 @@ export class HomePage {
 	}
 
 	getElemento(elemento) {
-		if (elemento.match(/(R|M)\d{1,2}/) != null ) {
+		if (elemento.match(/(R|M)\d{1,2}$/) != null ) {
 			return parseInt(elemento.substr(1));
 		}
 		return -1;
@@ -219,6 +246,34 @@ export class HomePage {
 	}
 	ehRegistrador( r ) {
     	return /R\d{1,2}/.test( r );
+	}
+	
+	clr(r) {
+		if (undefined == r || "" == r) {
+			for (let i = 0; i < this.config["registradores"]; i++) {
+				this.registradores[i].setValor('');
+			}
+			for (let i = 0; i < this.config["memoria"]; i++) {
+				this.memoria[i].setValor('');
+			}
+			this.acumulador.setValor('');
+			this.pc.setValor('');
+			this.ir.setValor('');
+		} else {
+			if (r == 'ACC') {
+				this.acumulador.setValor('');
+			} else if (r == 'PC') {
+				this.pc.setValor('');
+			} else if (r == 'IR') {
+				this.ir.setValor('');
+			} else {
+				if (this.ehRegistrador(r)) {
+					this.registradores[this.getElemento(r)].setValor('');
+				} else {
+					this.memoria[this.getElemento(r)].setValor('');
+				}
+			}
+		}
 	}
 
 	zer(r) {
@@ -284,8 +339,15 @@ export class HomePage {
 	}
 
 	sto(r) {
+		
 		let e = this.getElemento(r);
-		this.registradores[e].setValor(this.acumulador.getValor());
+		
+		if( this.ehRegistrador(r) ) {
+			this.registradores[e].setValor(this.acumulador.getValor());
+		} else {
+			this.memoria[e].setValor( this.acumulador.getValor() );
+		}
+
 		this.ir.setValor("STO " + r);
 	}
 
